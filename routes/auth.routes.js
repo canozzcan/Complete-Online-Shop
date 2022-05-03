@@ -7,6 +7,8 @@ const router = express.Router();
 // authController.getSignup is triggered whenever we get an incoming get request to /signup
 router.get('/signup', authController.getSignup);
 
+router.post('/signup', authController.signup);
+
 router.get('/login', authController.getLogin);
 
 module.exports = router;
