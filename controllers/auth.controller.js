@@ -3,21 +3,20 @@ const authUtil = require('../util/authentication');
 const validation = require('../util/validation');
 const sessionFlash = require('../util/session-flash');
 
-
 function getSignup(req, res) {
   let sessionData = sessionFlash.getSessionData(req);
 
-if (!sessionData) {
-  sessionData = {
-    email: '',
-    confirmEmail: '',
-    password: '',
-    fullname: '',
-    street: '',
-    postal: '',
-    city: ''
-  };
-}
+  if (!sessionData) {
+    sessionData = {
+      email: '',
+      confirmEmail: '',
+      password: '',
+      fullname: '',
+      street: '',
+      postal: '',
+      city: '',
+    };
+  }
 
   res.render('customer/auth/signup', { inputData: sessionData });
 }
@@ -30,25 +29,31 @@ async function signup(req, res, next) {
     fullname: req.body.fullname,
     street: req.body.street,
     postal: req.body.postal,
-    city: req.body.city
-  }
+    city: req.body.city,
+  };
 
-
-  if (!validation.userDetailsAreValid(
-    req.body.email,
-    req.body.password,
-    req.body.fullname,
-    req.body.street,
-    req.body.postal,
-    req.body.city
-  ) || !validation.emailIsConfirmed(req.body.email, req.body['confirm-email'])
+  if (
+    !validation.userDetailsAreValid(
+      req.body.email,
+      req.body.password,
+      req.body.fullname,
+      req.body.street,
+      req.body.postal,
+      req.body.city
+    ) ||
+    !validation.emailIsConfirmed(req.body.email, req.body['confirm-email'])
   ) {
-    sessionFlash.flashDataToSession(req, {
-      errorMessage: 'Please check your inputs!',
-      ...enteredData
-    }, function () {
-      res.redirect('/signup');
-    })
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage:
+          'Please check your input. Password must be at least 6 character slong, postal code must be 5 characters long.',
+        ...enteredData,
+      },
+      function () {
+        res.redirect('/signup');
+      }
+    );
     return;
   }
 
@@ -61,18 +66,20 @@ async function signup(req, res, next) {
     req.body.city
   );
 
-
-
   try {
-    const existAlready = user.existAllReady();
+    const existsAlready = await user.existsAlready();
 
-    if (existAlready) {
-      sessionFlash.flashDataToSession(req, {
-        errorMessage: 'User exist already! Try logging in instead!',
-        ...enteredData
-      }, function () {
-        res.redirect('/signup');
-      });
+    if (existsAlready) {
+      sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: 'User exists already! Try logging in instead!',
+          ...enteredData,
+        },
+        function () {
+          res.redirect('/signup');
+        }
+      );
       return;
     }
 
@@ -88,10 +95,10 @@ async function signup(req, res, next) {
 function getLogin(req, res) {
   let sessionData = sessionFlash.getSessionData(req);
 
-  if(!sessionData) {
+  if (!sessionData) {
     sessionData = {
       email: '',
-      password: ''
+      password: '',
     };
   }
 
@@ -109,24 +116,27 @@ async function login(req, res, next) {
   }
 
   const sessionErrorData = {
-    errorMessage:'Invalid credentials - please double check your email and password',
+    errorMessage:
+      'Invalid credentials - please double-check your email and password!',
     email: user.email,
-    password: user.password
-  }
+    password: user.password,
+  };
 
   if (!existingUser) {
-    sessionFlash.flashDataToSession(req, sessionErrorData , function() {
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
       res.redirect('/login');
-    })
+    });
     return;
   }
 
-  const passwordIsCorrect = await user.hasMatchingPassword(existingUser.password);
+  const passwordIsCorrect = await user.hasMatchingPassword(
+    existingUser.password
+  );
 
   if (!passwordIsCorrect) {
-    sessionFlash.flashDataToSession(req, sessionErrorData , function() {
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
       res.redirect('/login');
-    })
+    });
     return;
   }
 
@@ -145,5 +155,5 @@ module.exports = {
   getLogin: getLogin,
   signup: signup,
   login: login,
-  logout: logout
+  logout: logout,
 };

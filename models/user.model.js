@@ -10,7 +10,7 @@ class User {
     this.address = {
       street: street,
       postalCode: postal,
-      city: city
+      city: city,
     };
   }
 
@@ -18,11 +18,11 @@ class User {
     return db.getDb().collection('users').findOne({ email: this.email });
   }
 
-  async existAllReady() {
+  async existsAlready() {
     const existingUser = await this.getUserWithSameEmail();
-    if (existingUser){
+    if (existingUser) {
       return true;
-    } 
+    }
     return false;
   }
 
@@ -33,7 +33,7 @@ class User {
       email: this.email,
       password: hashedPassword,
       name: this.name,
-      address: this.address
+      address: this.address,
     });
   }
 
