@@ -10,7 +10,7 @@ const addCsrfTokenMiddleware = require('./middlewares/csrf-token');
 const errorHandlerMiddleware = require('./middlewares/error-handler');
 const checkAuthStatusMiddleware = require('./middlewares/check-auth');
 const authRoutes = require('./routes/auth.routes');
-const productRoutes = require('./routes/products.routes');
+const productsRoutes = require('./routes/products.routes');
 const baseRoutes = require('./routes/base.routes');
 const adminRoutes = require('./routes/admin.routes');
 
@@ -20,6 +20,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static('public'));
+app.use('/products/assets', express.static('product-data'));
 app.use(express.urlencoded({ extended: false }));
 
 const sessionConfig = createSessionConfig();
@@ -30,22 +31,18 @@ app.use(csrf());
 app.use(addCsrfTokenMiddleware);
 app.use(checkAuthStatusMiddleware);
 
-//middleware functions are evaluated for all incoming requests. 
 app.use(baseRoutes);
 app.use(authRoutes);
-app.use(productRoutes);
+app.use(productsRoutes);
 app.use('/admin', adminRoutes);
 
 app.use(errorHandlerMiddleware);
 
-
-/* "then()" to execute code if that promise succeeded or a
-   "catch()" if that promise failed  */
 db.connectToDatabase()
-    .then(function () {
-        app.listen(3000);
-    })
-    .catch(function (error) {
-        console.log('Failed to connect to a database');
-        console.log(error);
-    });
+  .then(function () {
+    app.listen(3000);
+  })
+  .catch(function (error) {
+    console.log('Failed to connect to the database!');
+    console.log(error);
+  });
