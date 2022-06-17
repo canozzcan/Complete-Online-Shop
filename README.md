@@ -2,13 +2,12 @@
   <a href="#calling-about">About</a>&nbsp;&nbsp;|&nbsp;
   <a href="#gear-technologies">Technologies</a>&nbsp;&nbsp;|&nbsp;
   <a href="#sparkles-main-features">Features</a>&nbsp;&nbsp;|&nbsp;
-  <a href="#camera_flash-screenshots">Demo Video</a>&nbsp;&nbsp;|&nbsp;
-  <a href="#ballot_box-mysql-database">Database</a>&nbsp;&nbsp;|&nbsp;
+  <a href="#video-demo-video">Demo Video</a>&nbsp;&nbsp;|&nbsp;
   <a href="#computer-setup">Setup</a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 </p>
 
 
-## About
+## :calling: About
 WDE is a complete online shopping store where you can register and buy the product you want.
 
 ## :gear: Technologies
@@ -45,10 +44,11 @@ Stripe API used for payment transactions
 
 
 
-## :camera_flash: Demo Video
+## :video: Demo Video
 
 
-https://user-images.githubusercontent.com/102858441/174394630-65b3b5cb-6928-4f7a-b578-d4742f560830.mp4
+
+https://user-images.githubusercontent.com/102858441/174395474-f534f458-992b-4d9e-98d3-123d6e683ee9.mp4
 
 
 
